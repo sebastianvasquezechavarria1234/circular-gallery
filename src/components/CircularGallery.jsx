@@ -451,7 +451,7 @@ class App {
 }
 
 export default function CircularGallery({
-  items,
+  items = undefined,
   bend = 3,
   textColor = '#ffffff',
   borderRadius = 0.05,
