@@ -555,17 +555,7 @@ export default function CircularGallery({
 
   useEffect(() => {
     let app: any;
-    const initApp = async () => {
-      try {
-        // Wait for both normal and bold weights to be loaded
-        await Promise.all([
-          document.fonts.load('400 30px "Google Sans Flex"'),
-          document.fonts.load('700 30px "Google Sans Flex"')
-        ]);
-      } catch (e) {
-        console.error("Font loading failed:", e);
-      }
-
+    const initApp = async () => { /* Font loading is handled globally via Next.js (next/font/local). */
       if (containerRef.current) {
         app = new App(containerRef.current, {
           items,
