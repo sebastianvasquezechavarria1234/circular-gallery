@@ -361,6 +361,7 @@ class App {
   boundOnTouchUp: any;
   screen: any;
   viewport: any;
+  lastTime: number;
 
   constructor(
     container: HTMLElement,
@@ -369,15 +370,16 @@ class App {
       bend,
       textColor = '#ffffff',
       borderRadius = 0,
-      font = 'bold 30px Google Sans Flex',
+      font = 'bold 30px "Google Sans Flex"',
       scrollSpeed = 2,
-      scrollEase = 0.05
+      scrollEase = 0.08
     }: any = {}
   ) {
     document.documentElement.classList.remove('no-js');
     this.container = container;
     this.scrollSpeed = scrollSpeed;
     this.scroll = { ease: scrollEase, current: 0, target: 0, last: 0 };
+    this.lastTime = performance.now();
     this.onCheckDebounce = debounce(this.onCheck.bind(this), 200);
     this.createRenderer();
     this.createCamera();
@@ -493,7 +495,12 @@ class App {
     }
   }
   update() {
-    this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease);
+    const now = performance.now();
+    const dt = Math.min((now - this.lastTime) / 16.667, 3);
+    this.lastTime = now;
+
+    const t = 1 - Math.pow(1 - this.scroll.ease, dt);
+    this.scroll.current = lerp(this.scroll.current, this.scroll.target, t);
     const direction = this.scroll.current > this.scroll.last ? 'right' : 'left';
     if (this.medias) {
       this.medias.forEach((media: any) => media.update(this.scroll, direction));
@@ -540,9 +547,9 @@ export default function CircularGallery({
   bend = 3,
   textColor = '#ffffff',
   borderRadius = 0.05,
-  font = 'bold 30px Google Sans Flex',
+  font = 'bold 30px "Google Sans Flex"',
   scrollSpeed = 2,
-  scrollEase = 0.05
+  scrollEase = 0.08
 }: CircularGalleryProps) {
   const containerRef = useRef(null);
 
@@ -552,8 +559,8 @@ export default function CircularGallery({
       try {
         // Wait for both normal and bold weights to be loaded
         await Promise.all([
-          document.fonts.load("400 30px Google Sans Flex"),
-          document.fonts.load("700 30px Google Sans Flex")
+          document.fonts.load('400 30px "Google Sans Flex"'),
+          document.fonts.load('700 30px "Google Sans Flex"')
         ]);
       } catch (e) {
         console.error("Font loading failed:", e);

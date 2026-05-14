@@ -17,7 +17,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="w-screen h-screen bg-black">
+    <div className="relative z-10 w-screen h-screen">
       <CircularGallery
         items={landscapeItems}
         bend={3}

@@ -1,43 +1,52 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: 'Google Sans Flex';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/googlesansflex/v20/t5sJIQcYNIWbFgDgAAzZ34auoVyXkJCOvp3SFWJbN5hF8Ju1x6sKCyp0l9sI40swNJwInycYAJzz0m7kJ4qFQOJBOjLvDSndo0SKMpKSTzwliVdHAy4bxTDHg_ugnAakp8ubycs.ttf) format('truetype');
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
-@font-face {
-  font-family: 'Google Sans Flex';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/googlesansflex/v20/t5sJIQcYNIWbFgDgAAzZ34auoVyXkJCOvp3SFWJbN5hF8Ju1x6sKCyp0l9sI40swNJwInycYAJzz0m7kJ4qFQOJBOjLvDSndo0SKMpKSTzwliVdHAy4bxTDHg_ugnAakpyycycs.ttf) format('truetype');
-}
-
- 
- :root {
-   --background: #ffffff;
-   --foreground: #171717;
- }
- 
- @theme inline {
-   --color-background: var(--background);
-   --color-foreground: var(--foreground);
-   --font-sans: "Google Sans Flex", sans-serif;
-   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
- }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Google Sans Flex", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+}
+
+@keyframes blob1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(60px, -80px) scale(1.15); }
+  50% { transform: translate(-40px, 50px) scale(0.85); }
+  75% { transform: translate(50px, 60px) scale(1.1); }
+}
+
+@keyframes blob2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-70px, 40px) scale(1.1); }
+  66% { transform: translate(50px, -60px) scale(0.9); }
+}
+
+@keyframes blob3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(40px, 60px) scale(1.2); }
+  50% { transform: translate(-60px, -30px) scale(0.8); }
+  75% { transform: translate(-20px, 50px) scale(1.05); }
+}
+
+@keyframes blob4 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(50px, -50px) scale(1.15); }
+  66% { transform: translate(-50px, 40px) scale(0.9); }
+}
+
+@keyframes blob5 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-40px, -60px) scale(0.9); }
+  50% { transform: translate(60px, 30px) scale(1.15); }
+  75% { transform: translate(30px, -40px) scale(1); }
 }
