@@ -214,7 +214,7 @@ class Media {
       renderer: this.renderer,
       text: this.text,
       textColor: this.textColor,
-      fontFamily: this.font
+      font: this.font
     });
   }
   update(scroll, direction) {
@@ -284,7 +284,7 @@ class App {
       bend,
       textColor = '#ffffff',
       borderRadius = 0,
-      font = 'bold 30px Figtree',
+      font = 'bold 30px "Google Sans Flex"',
       scrollSpeed = 2,
       scrollEase = 0.05
     } = {}
@@ -455,24 +455,28 @@ export default function CircularGallery({
   bend = 3,
   textColor = '#ffffff',
   borderRadius = 0.05,
-  font = 'bold 30px Figtree',
+  font = 'bold 30px "Google Sans Flex"',
   scrollSpeed = 2,
   scrollEase = 0.05
 }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    const app = new App(containerRef.current, {
-      items,
-      bend,
-      textColor,
-      borderRadius,
-      font,
-      scrollSpeed,
-      scrollEase
+    let app;
+    document.fonts.ready.then(() => {
+      if (!containerRef.current) return;
+      app = new App(containerRef.current, {
+        items,
+        bend,
+        textColor,
+        borderRadius,
+        font,
+        scrollSpeed,
+        scrollEase
+      });
     });
     return () => {
-      app.destroy();
+      if (app) app.destroy();
     };
   }, [items, bend, textColor, borderRadius, font, scrollSpeed, scrollEase]);
 
