@@ -24,24 +24,36 @@ function autoBind(instance) {
   });
 }
 
-function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'black') {
+function createTextTexture(gl, text, font = 'bold 30px sans-serif', color = 'black') {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
+  
+  // Set font to measure
   context.font = font;
   const metrics = context.measureText(text);
   const textWidth = Math.ceil(metrics.width);
-  const textHeight = Math.ceil(parseInt(font, 10) * 1.2);
-  canvas.width = textWidth + 20;
-  canvas.height = textHeight + 20;
+  const sizeMatch = font.match(/(\d+)px/);
+  const textHeight = sizeMatch ? Math.ceil(parseInt(sizeMatch[1], 10) * 1.2) : 30;
+
+  // Use a higher resolution for the canvas based on device pixel ratio
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = (textWidth + 40) * dpr;
+  canvas.height = (textHeight + 40) * dpr;
+  
+  // Clear and scale
+  context.scale(dpr, dpr);
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Set font again after resize and scale
   context.font = font;
   context.fillStyle = color;
   context.textBaseline = 'middle';
   context.textAlign = 'center';
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  context.fillText(text, canvas.width / 2, canvas.height / 2);
-  const texture = new Texture(gl, { generateMipmaps: false });
+  context.fillText(text, (textWidth + 40) / 2, (textHeight + 40) / 2);
+
+  const texture = new Texture(gl, { generateMipmaps: true });
   texture.image = canvas;
-  return { texture, width: canvas.width, height: canvas.height };
+  return { texture, width: canvas.width / dpr, height: canvas.height / dpr };
 }
 
 class Title {
@@ -284,7 +296,7 @@ class App {
       bend,
       textColor = '#ffffff',
       borderRadius = 0,
-      font = 'bold 30px "Google Sans Flex"',
+      font = 'bold 30px Google Sans Flex',
       scrollSpeed = 2,
       scrollEase = 0.05
     } = {}
@@ -455,7 +467,7 @@ export default function CircularGallery({
   bend = 3,
   textColor = '#ffffff',
   borderRadius = 0.05,
-  font = 'bold 30px "Google Sans Flex"',
+  font = 'bold 30px Google Sans Flex',
   scrollSpeed = 2,
   scrollEase = 0.05
 }) {
@@ -463,18 +475,32 @@ export default function CircularGallery({
 
   useEffect(() => {
     let app;
-    document.fonts.ready.then(() => {
-      if (!containerRef.current) return;
-      app = new App(containerRef.current, {
-        items,
-        bend,
-        textColor,
-        borderRadius,
-        font,
-        scrollSpeed,
-        scrollEase
-      });
-    });
+    const initApp = async () => {
+      try {
+        // Wait for both normal and bold weights to be loaded
+        await Promise.all([
+          document.fonts.load("400 30px Google Sans Flex"),
+          document.fonts.load("700 30px Google Sans Flex")
+        ]);
+      } catch (e) {
+        console.error("Font loading failed:", e);
+      }
+
+      if (containerRef.current) {
+        app = new App(containerRef.current, {
+          items,
+          bend,
+          textColor,
+          borderRadius,
+          font,
+          scrollSpeed,
+          scrollEase
+        });
+      }
+    };
+
+    initApp();
+
     return () => {
       if (app) app.destroy();
     };
