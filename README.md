@@ -2,7 +2,7 @@
 
 A stunning, high-performance circular gallery built with **Next.js**, **OGL (WebGL)**, and **React**. This project features a smooth, infinite scrolling experience with a unique bending effect on images.
 
-![Project Preview](/public/preview.png)
+![Project Preview](public/preview.png)
 
 ## ✨ Features
 
@@ -79,3 +79,7 @@ export default function Home() {
 ## 📄 License
 
 This project is licensed under the MIT License.
+
+---
+
+Made with love by [Sebastian Vasquez Echavarria](https://sebas-dev.vercel.app/)
