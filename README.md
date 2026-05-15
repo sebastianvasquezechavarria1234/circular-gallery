@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Circular Gallery
 
-## Getting Started
+A stunning, high-performance circular gallery built with **Next.js**, **OGL (WebGL)**, and **React**. This project features a smooth, infinite scrolling experience with a unique bending effect on images.
 
-First, run the development server:
+![Project Preview](/public/preview.png)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## ✨ Features
+
+- **Smooth Scrolling**: Implements a high-quality scroll system with easing for a premium feel.
+- **WebGL Rendering**: Uses OGL for efficient and fluid image animations.
+- **Dynamic Bending**: Images subtly bend as they rotate through the circular path.
+- **Infinite Loop**: Seamless transitions that allow the gallery to loop indefinitely.
+- **Responsive Design**: Built to work across different screen sizes.
+- **Clean Architecture**: Modern Next.js App Router structure with reusable components.
+
+## 🚀 Tech Stack
+
+- **Core**: [Next.js 15+](https://nextjs.org/)
+- **Logic**: [React](https://react.dev/)
+- **Graphics**: [OGL](https://github.com/o-gl/ogl) (Open Graphics Library)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Typography**: [Inter](https://fonts.google.com/specimen/Inter)
+
+## 🛠️ Getting Started
+
+### Prerequisites
+
+- Node.js 18.x or higher
+- npm, yarn, pnpm, or bun
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/sebastianvasquezechavarria1234/circular-gallery.git
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the results.
+
+## 📖 Component Usage
+
+You can easily integrate the gallery into your pages:
+
+```tsx
+import CircularGallery from '@/components/CircularGallery';
+
+export default function Home() {
+  return (
+    <CircularGallery 
+      bend={3} 
+      borderRadius={0.05} 
+      scrollSpeed={2} 
+      scrollEase={0.08}
+    />
+  );
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Props
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `Array` | `[]` | List of images and titles (optional). |
+| `bend` | `Number` | `3` | Intensity of the circular bending effect. |
+| `borderRadius` | `Number` | `0.05` | Border radius of the gallery items. |
+| `scrollSpeed` | `Number` | `2` | Speed of the scroll interaction. |
+| `scrollEase` | `Number` | `0.08` | Smoothing factor for scrolling. |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📄 License
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License.
