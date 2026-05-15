@@ -32,101 +32,9 @@ interface GalleryItem {
 interface CircularGalleryProps {
   items?: GalleryItem[];
   bend?: number;
-  textColor?: string;
   borderRadius?: number;
-  font?: string;
   scrollSpeed?: number;
   scrollEase?: number;
-}
-
-function createTextTexture(gl: any, text: string, font = 'bold 30px sans-serif', color = 'black') {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-  if (!context) return { texture: new Texture(gl), width: 0, height: 0 };
-  
-  // Set font to measure
-  context.font = font;
-  const metrics = context.measureText(text);
-  const textWidth = Math.ceil(metrics.width);
-  const sizeMatch = font.match(/(\d+)px/);
-  const textHeight = sizeMatch ? Math.ceil(parseInt(sizeMatch[1], 10) * 1.2) : 30;
-
-  // Use a higher resolution for the canvas based on device pixel ratio
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = (textWidth + 40) * dpr;
-  canvas.height = (textHeight + 40) * dpr;
-  
-  // Clear and scale
-  context.scale(dpr, dpr);
-  context.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Set font again after resize and scale
-  context.font = font;
-  context.fillStyle = color;
-  context.textBaseline = 'middle';
-  context.textAlign = 'center';
-  context.fillText(text, (textWidth + 40) / 2, (textHeight + 40) / 2);
-
-  const texture = new Texture(gl, { generateMipmaps: true });
-  texture.image = canvas;
-  return { texture, width: canvas.width / dpr, height: canvas.height / dpr };
-}
-
-class Title {
-  gl: any;
-  plane: any;
-  renderer: any;
-  text: string;
-  textColor: string;
-  font: string;
-  mesh: any;
-
-  constructor({ gl, plane, renderer, text, textColor = '#545050', font = '30px sans-serif' }: any) {
-    autoBind(this);
-    this.gl = gl;
-    this.plane = plane;
-    this.renderer = renderer;
-    this.text = text;
-    this.textColor = textColor;
-    this.font = font;
-    this.createMesh();
-  }
-  createMesh() {
-    const { texture, width, height } = createTextTexture(this.gl, this.text, this.font, this.textColor);
-    const geometry = new Plane(this.gl);
-    const program = new Program(this.gl, {
-      vertex: `
-        attribute vec3 position;
-        attribute vec2 uv;
-        uniform mat4 modelViewMatrix;
-        uniform mat4 projectionMatrix;
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragment: `
-        precision highp float;
-        uniform sampler2D tMap;
-        varying vec2 vUv;
-        void main() {
-          vec4 color = texture2D(tMap, vUv);
-          if (color.a < 0.1) discard;
-          gl_FragColor = color;
-        }
-      `,
-      uniforms: { tMap: { value: texture } },
-      transparent: true
-    });
-    this.mesh = new Mesh(this.gl, { geometry, program });
-    const aspect = width / height;
-    const textHeight = this.plane.scale.y * 0.15;
-    const textWidth = textHeight * aspect;
-    this.mesh.scale.set(textWidth, textHeight, 1);
-    this.mesh.position.y = -this.plane.scale.y * 0.5 - textHeight * 0.5 - 0.05;
-    this.mesh.setParent(this.plane);
-  }
 }
 
 class Media {
@@ -139,15 +47,11 @@ class Media {
   renderer: any;
   scene: any;
   screen: any;
-  text: string;
   viewport: any;
   bend: number;
-  textColor: string;
   borderRadius: number;
-  font: string;
   program: any;
   plane: any;
-  title: any;
   x: any;
   speed: any;
   widthTotal: any;
@@ -166,12 +70,9 @@ class Media {
     renderer,
     scene,
     screen,
-    text,
     viewport,
     bend,
-    textColor,
     borderRadius = 0,
-    font
   }: any) {
     this.extra = 0;
     this.geometry = geometry;
@@ -182,15 +83,11 @@ class Media {
     this.renderer = renderer;
     this.scene = scene;
     this.screen = screen;
-    this.text = text;
     this.viewport = viewport;
     this.bend = bend;
-    this.textColor = textColor;
     this.borderRadius = borderRadius;
-    this.font = font;
     this.createShader();
     this.createMesh();
-    this.createTitle();
     this.onResize();
   }
   createShader() {
@@ -269,16 +166,6 @@ class Media {
       program: this.program
     });
     this.plane.setParent(this.scene);
-  }
-  createTitle() {
-    this.title = new Title({
-      gl: this.gl,
-      plane: this.plane,
-      renderer: this.renderer,
-      text: this.text,
-      textColor: this.textColor,
-      font: this.font
-    });
   }
   update(scroll: any, direction: string) {
     this.plane.position.x = this.x - scroll.current - this.extra;
@@ -368,9 +255,7 @@ class App {
     {
       items,
       bend,
-      textColor = '#ffffff',
       borderRadius = 0,
-      font = 'bold 30px "Google Sans Flex"',
       scrollSpeed = 2,
       scrollEase = 0.08
     }: any = {}
@@ -386,7 +271,7 @@ class App {
     this.createScene();
     this.onResize();
     this.createGeometry();
-    this.createMedias(items, bend, textColor, borderRadius, font);
+    this.createMedias(items, bend, borderRadius);
     this.update();
     this.addEventListeners();
   }
@@ -414,24 +299,23 @@ class App {
       widthSegments: 100
     });
   }
-  createMedias(items: any[], bend = 1, textColor: string, borderRadius: number, font: string) {
-    const defaultItems = [
-      { image: `https://picsum.photos/seed/1/800/600?grayscale`, text: 'Bridge' },
-      { image: `https://picsum.photos/seed/2/800/600?grayscale`, text: 'Desk Setup' },
-      { image: `https://picsum.photos/seed/3/800/600?grayscale`, text: 'Waterfall' },
-      { image: `https://picsum.photos/seed/4/800/600?grayscale`, text: 'Strawberries' },
-      { image: `https://picsum.photos/seed/5/800/600?grayscale`, text: 'Deep Diving' },
-      { image: `https://picsum.photos/seed/16/800/600?grayscale`, text: 'Train Track' },
-      { image: `https://picsum.photos/seed/17/800/600?grayscale`, text: 'Santorini' },
-      { image: `https://picsum.photos/seed/8/800/600?grayscale`, text: 'Blurry Lights' },
-      { image: `https://picsum.photos/seed/9/800/600?grayscale`, text: 'New York' },
-      { image: `https://picsum.photos/seed/10/800/600?grayscale`, text: 'Good Boy' },
-      { image: `https://picsum.photos/seed/21/800/600?grayscale`, text: 'Coastline' },
-      { image: `https://picsum.photos/seed/12/800/600?grayscale`, text: 'Palm Trees' }
+  createMedias(items: any[], bend = 1, borderRadius: number) {
+    const defaultItems: GalleryItem[] = items.length ? items : [
+      { image: `https://picsum.photos/seed/1/800/600?grayscale`, text: '' },
+      { image: `https://picsum.photos/seed/2/800/600?grayscale`, text: '' },
+      { image: `https://picsum.photos/seed/3/800/600?grayscale`, text: '' },
+      { image: `https://picsum.photos/seed/4/800/600?grayscale`, text: '' },
+      { image: `https://picsum.photos/seed/5/800/600?grayscale`, text: '' },
+      { image: `https://picsum.photos/seed/16/800/600?grayscale`, text: '' },
+      { image: `https://picsum.photos/seed/17/800/600?grayscale`, text: '' },
+      { image: `https://picsum.photos/seed/8/800/600?grayscale`, text: '' },
+      { image: `https://picsum.photos/seed/9/800/600?grayscale`, text: '' },
+      { image: `https://picsum.photos/seed/10/800/600?grayscale`, text: '' },
+      { image: `https://picsum.photos/seed/21/800/600?grayscale`, text: '' },
+      { image: `https://picsum.photos/seed/12/800/600?grayscale`, text: '' }
     ];
-    const galleryItems = items && items.length ? items : defaultItems;
-    this.mediasImages = galleryItems.concat(galleryItems);
-    this.medias = this.mediasImages.map((data: any, index: number) => {
+    this.mediasImages = defaultItems.concat(defaultItems);
+    this.medias = this.mediasImages.map((data: GalleryItem, index: number) => {
       return new Media({
         geometry: this.planeGeometry,
         gl: this.gl,
@@ -441,12 +325,9 @@ class App {
         renderer: this.renderer,
         scene: this.scene,
         screen: this.screen,
-        text: data.text,
         viewport: this.viewport,
         bend,
-        textColor,
         borderRadius,
-        font
       });
     });
   }
@@ -545,9 +426,7 @@ class App {
 export default function CircularGallery({
   items = [],
   bend = 3,
-  textColor = '#ffffff',
   borderRadius = 0.05,
-  font = 'bold 30px "Google Sans Flex"',
   scrollSpeed = 2,
   scrollEase = 0.08
 }: CircularGalleryProps) {
@@ -555,14 +434,12 @@ export default function CircularGallery({
 
   useEffect(() => {
     let app: any;
-    const initApp = async () => { /* Font loading is handled globally via Next.js (next/font/local). */
+    const initApp = async () => {
       if (containerRef.current) {
         app = new App(containerRef.current, {
           items,
           bend,
-          textColor,
           borderRadius,
-          font,
           scrollSpeed,
           scrollEase
         });
@@ -574,7 +451,7 @@ export default function CircularGallery({
     return () => {
       if (app) app.destroy();
     };
-  }, [items, bend, textColor, borderRadius, font, scrollSpeed, scrollEase]);
+  }, [items, bend, borderRadius, scrollSpeed, scrollEase]);
 
   return (
     <div

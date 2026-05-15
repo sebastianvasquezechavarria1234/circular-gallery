@@ -24,7 +24,6 @@ export default function Home() {
         borderRadius={0}
         scrollSpeed={2}
         scrollEase={0.05}
-        textColor="#ffffff"
       />
     </div>
   );
