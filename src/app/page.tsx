@@ -2,18 +2,13 @@ import CircularGallery from '@/components/CircularGallery';
 
 export default function Home() {
   const landscapeItems = [
-    { image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800', text: 'Mountains' },
-    { image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=800', text: 'Misty' },
-    { image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=800', text: 'Forest' },
-    { image: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&q=80&w=800', text: 'Coastal' },
-    { image: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&q=80&w=800', text: 'Hills' },
-    { image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800', text: 'Valley' },
-    { image: 'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&q=80&w=800', text: 'Serene' },
-    { image: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&q=80&w=800', text: 'Waterfall' },
-    { image: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&q=80&w=800', text: 'Nature' },
-    { image: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&q=80&w=800', text: 'Ecosystem' },
-    { image: 'https://images.unsplash.com/photo-1491002052546-bf38f186af56?auto=format&fit=crop&q=80&w=800', text: 'Snow' },
-    { image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800', text: 'Beach' }
+    { image: '/048155170c820a3dad81ae1e5b043538.jpg', text: 'Imagen 1' },
+    { image: '/16d276dae2b866be1c8faed7ccc1bb15.jpg', text: 'Imagen 2' },
+    { image: '/47c98aecdfdaa0e4c8a585642981b357.jpg', text: 'Imagen 3' },
+    { image: '/8496ace83d5a13daeb68a6516c58dd99.jpg', text: 'Imagen 4' },
+    { image: '/c09384d9ab2dade46db96408a33caba9.jpg', text: 'Imagen 5' },
+    { image: '/ce7d991bd59fe943385fbea80dd7b222.jpg', text: 'Imagen 6' },
+    { image: '/d5b90ec3e614ccd60a5479919c95dd4e.jpg', text: 'Imagen 7' }
   ];
 
   return (
