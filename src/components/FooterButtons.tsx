@@ -32,7 +32,7 @@ export default function FooterButtons() {
         ✨ Created by Sebastian Vasquez
       </a>
       <a
-        href="https://github.com/sebastianvasquezechavarria1234/infinite-menu"
+        href="https://github.com/sebastianvasquezechavarria1234/circular-gallery"
         target="_blank"
         rel="noopener noreferrer"
         style={{
