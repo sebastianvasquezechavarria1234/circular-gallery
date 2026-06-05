@@ -1,4 +1,5 @@
 import CircularGallery from '@/components/CircularGallery';
+import FooterButtons from '@/components/FooterButtons';
 
 export default function Home() {
   const landscapeItems = [
@@ -20,6 +21,7 @@ export default function Home() {
         scrollSpeed={2}
         scrollEase={0.05}
       />
+      <FooterButtons />
     </div>
   );
 }
