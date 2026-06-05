@@ -29,7 +29,7 @@ export default function FooterButtons() {
         onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
         onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.8')}
       >
-        ✨ Created by Sebastian Vasquez
+        Created by Sebastian Vasquez
       </a>
       <a
         href="https://github.com/sebastianvasquezechavarria1234/circular-gallery"
